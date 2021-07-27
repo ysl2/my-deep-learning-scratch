@@ -1,0 +1,277 @@
+Help on module tsensor.analysis in tsensor:
+
+NAME
+    tsensor.analysis - MIT License
+
+DESCRIPTION
+    Copyright (c) 2020 Terence Parr
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+    
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+    
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+
+CLASSES
+    builtins.object
+        ExplainTensorTracer
+        clarify
+        explain
+    
+    class ExplainTensorTracer(builtins.object)
+     |  ExplainTensorTracer(explainer)
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, explainer)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  hash(self, statement)
+     |      We want to avoid generating a visualization more than once.
+     |      For now, assume that the code for a statement is the unique identifier.
+     |  
+     |  line_listener(self, module, name, filename, line, info, frame)
+     |  
+     |  listener(self, frame, event, arg)
+     |  
+     |  viz_statement(self, code, frame)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+    
+    class clarify(builtins.object)
+     |  clarify(fontname='Consolas', fontsize=13, dimfontname='Arial', dimfontsize=9, matrixcolor='#cfe2d4', vectorcolor='#fefecd', char_sep_scale=1.8, fontcolor='#444443', underline_color='#C2C2C2', ignored_color='#B4B4B4', error_op_color='#A40227', show: (None, 'viz') = 'viz', hush_errors=True)
+     |  
+     |  Methods defined here:
+     |  
+     |  __enter__(self)
+     |  
+     |  __exit__(self, exc_type, exc_value, exc_traceback)
+     |  
+     |  __init__(self, fontname='Consolas', fontsize=13, dimfontname='Arial', dimfontsize=9, matrixcolor='#cfe2d4', vectorcolor='#fefecd', char_sep_scale=1.8, fontcolor='#444443', underline_color='#C2C2C2', ignored_color='#B4B4B4', error_op_color='#A40227', show: (None, 'viz') = 'viz', hush_errors=True)
+     |      Augment tensor-related exceptions generated from numpy, pytorch, and tensorflow.
+     |      Also display a visual representation of the offending Python line that
+     |      shows the shape of tensors referenced by the code. All you have to do is wrap
+     |      the outermost level of your code and clarify() will activate upon exception.
+     |      
+     |      Visualizations pop up in a separate window unless running from a notebook,
+     |      in which case the visualization appears as part of the cell execution output.
+     |      
+     |      There is no runtime overhead associated with clarify() unless an exception occurs.
+     |      
+     |      The offending code is executed a second time, to identify which sub expressions
+     |      are to blame. This implies that code with side effects could conceivably cause
+     |      a problem, but since an exception has been generated, results are suspicious
+     |      anyway.
+     |      
+     |      Example:
+     |      
+     |      import numpy as np
+     |      import tsensor
+     |      
+     |      b = np.array([9, 10]).reshape(2, 1)
+     |      with tsensor.clarify():
+     |          np.dot(b,b) # tensor code or call to a function with tensor code
+     |      
+     |      See examples.ipynb for more examples.
+     |      
+     |      :param fontname: The name of the font used to display Python code
+     |      :param fontsize: The font size used to display Python code; default is 13.
+     |                       Also use this to increase the size of the generated figure;
+     |                       larger font size means larger image.
+     |      :param dimfontname:  The name of the font used to display the dimensions on the matrix and vector boxes
+     |      :param dimfontsize: The  size of the font used to display the dimensions on the matrix and vector boxes
+     |      :param matrixcolor:  The  color of matrix boxes
+     |      :param vectorcolor: The color of vector boxes; only for tensors whose shape is (n,).
+     |      :param char_sep_scale: It is notoriously difficult to discover how wide and tall
+     |                             text is when plotted in matplotlib. In fact there's probably,
+     |                             no hope to discover this information accurately in all cases.
+     |                             Certainly, I gave up after spending huge effort. We have a
+     |                             situation here where the font should be constant width, so
+     |                             we can just use a simple scaler times the font size  to get
+     |                             a reasonable approximation to the width and height of a
+     |                             character box; the default of 1.8 seems to work reasonably
+     |                             well for a wide range of fonts, but you might have to tweak it
+     |                             when you change the font size.
+     |      :param fontcolor:  The color of the Python code.
+     |      :param underline_color:  The color of the lines that underscore tensor subexpressions; default is grey
+     |      :param ignored_color: The de-highlighted color for deemphasizing code not involved in an erroneous sub expression
+     |      :param error_op_color: The color to use for characters associated with the erroneous operator
+     |      :param ax: If not none, this is the matplotlib drawing region in which to draw the visualization
+     |      :param dpi: This library tries to generate SVG files, which are vector graphics not
+     |                  2D arrays of pixels like PNG files. However, it needs to know how to
+     |                  compute the exact figure size to remove padding around the visualization.
+     |                  Matplotlib uses inches for its figure size and so we must convert
+     |                  from pixels or data units to inches, which means we have to know what the
+     |                  dots per inch, dpi, is for the image.
+     |      :param hush_errors: Normally, error messages from true syntax errors but also
+     |                          unhandled code caught by my parser are ignored. Turn this off
+     |                          to see what the error messages are coming from my parser.
+     |      :param show: Show visualization upon tensor error if show='viz'.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data and other attributes defined here:
+     |  
+     |  nesting = 0
+    
+    class explain(builtins.object)
+     |  explain(fontname='Consolas', fontsize=13, dimfontname='Arial', dimfontsize=9, matrixcolor='#cfe2d4', vectorcolor='#fefecd', char_sep_scale=1.8, fontcolor='#444443', underline_color='#C2C2C2', ignored_color='#B4B4B4', error_op_color='#A40227', savefig=None, hush_errors=True)
+     |  
+     |  Methods defined here:
+     |  
+     |  __enter__(self)
+     |  
+     |  __exit__(self, exc_type, exc_value, exc_traceback)
+     |  
+     |  __init__(self, fontname='Consolas', fontsize=13, dimfontname='Arial', dimfontsize=9, matrixcolor='#cfe2d4', vectorcolor='#fefecd', char_sep_scale=1.8, fontcolor='#444443', underline_color='#C2C2C2', ignored_color='#B4B4B4', error_op_color='#A40227', savefig=None, hush_errors=True)
+     |      As the Python virtual machine executes lines of code, generate a
+     |      visualization for tensor-related expressions using from numpy, pytorch,
+     |      and tensorflow. The shape of tensors referenced by the code are displayed.
+     |      
+     |      Visualizations pop up in a separate window unless running from a notebook,
+     |      in which case the visualization appears as part of the cell execution output.
+     |      
+     |      There is heavy runtime overhead associated with explain() as every line
+     |      is executed twice: once by explain() and then another time by the interpreter
+     |      as part of normal execution.
+     |      
+     |      Expressions with side effects can easily generate incorrect results. Due to
+     |      this and the overhead, you should limit the use of this to code you're trying
+     |      to debug.  Assignments are not evaluated by explain so code `x = ...` causes
+     |      an assignment to x just once, during normal execution. This explainer
+     |      knows the value of x and will display it but does not assign to it.
+     |      
+     |      Upon exception, execution will stop as usual but, like clarify(), explain()
+     |      will augment the exception to indicate the offending sub expression. Further,
+     |      the visualization will deemphasize code not associated with the offending
+     |      sub expression. The sizes of relevant tensor values are still visualized.
+     |      
+     |      Example:
+     |      
+     |      import numpy as np
+     |      import tsensor
+     |      
+     |      b = np.array([9, 10]).reshape(2, 1)
+     |      with tsensor.explain():
+     |          b + b # tensor code or call to a function with tensor code
+     |      
+     |      See examples.ipynb for more examples.
+     |      
+     |      :param fontname: The name of the font used to display Python code
+     |      :param fontsize: The font size used to display Python code; default is 13.
+     |                       Also use this to increase the size of the generated figure;
+     |                       larger font size means larger image.
+     |      :param dimfontname:  The name of the font used to display the dimensions on the matrix and vector boxes
+     |      :param dimfontsize: The  size of the font used to display the dimensions on the matrix and vector boxes
+     |      :param matrixcolor:  The  color of matrix boxes
+     |      :param vectorcolor: The color of vector boxes; only for tensors whose shape is (n,).
+     |      :param char_sep_scale: It is notoriously difficult to discover how wide and tall
+     |                             text is when plotted in matplotlib. In fact there's probably,
+     |                             no hope to discover this information accurately in all cases.
+     |                             Certainly, I gave up after spending huge effort. We have a
+     |                             situation here where the font should be constant width, so
+     |                             we can just use a simple scaler times the font size  to get
+     |                             a reasonable approximation to the width and height of a
+     |                             character box; the default of 1.8 seems to work reasonably
+     |                             well for a wide range of fonts, but you might have to tweak it
+     |                             when you change the font size.
+     |      :param fontcolor:  The color of the Python code.
+     |      :param underline_color:  The color of the lines that underscore tensor subexpressions; default is grey
+     |      :param ignored_color: The de-highlighted color for deemphasizing code not involved in an erroneous sub expression
+     |      :param error_op_color: The color to use for characters associated with the erroneous operator
+     |      :param ax: If not none, this is the matplotlib drawing region in which to draw the visualization
+     |      :param dpi: This library tries to generate SVG files, which are vector graphics not
+     |                  2D arrays of pixels like PNG files. However, it needs to know how to
+     |                  compute the exact figure size to remove padding around the visualization.
+     |                  Matplotlib uses inches for its figure size and so we must convert
+     |                  from pixels or data units to inches, which means we have to know what the
+     |                  dots per inch, dpi, is for the image.
+     |      :param hush_errors: Normally, error messages from true syntax errors but also
+     |                          unhandled code caught by my parser are ignored. Turn this off
+     |                          to see what the error messages are coming from my parser.
+     |      :param savefig: A string indicating where to save the visualization; don't save
+     |                      a file if None.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+
+FUNCTIONS
+    augment_exception(exc_value, subexpr)
+    
+    eval(statement: str, frame=None) -> (<class 'tsensor.ast.ParseTreeNode'>, <class 'object'>)
+        Parse statement and return an ast in the context of execution frame or, if None,
+        the invoking function's frame. Set the value field of all ast nodes.
+        Overall result is in root.value.
+        :param statement: A string representing the line of Python code to visualize within an execution frame.
+        :param frame: The execution frame in which to evaluate the statement. If None,
+                      use the execution frame of the invoking function
+        :return An abstract parse tree representing the statement; nodes are
+                ParseTreeNode subclasses.
+    
+    f(x, y)
+    
+    info(frame)
+    
+    is_interesting_exception(e)
+    
+    istensor(x)
+    
+    smallest_matrix_subexpr(t)
+        During visualization, we need to find the smallest expression
+        that evaluates to a non-scalar. That corresponds to the deepest subtree
+        that evaluates to a non-scalar. Because we do not have parent pointers,
+        we cannot start at the leaves and walk upwards. Instead, pass a Boolean
+        back to indicate whether this node or one of the descendants
+        evaluates to a non-scalar.  Nodes in the tree that have matrix values and
+        no matrix below are the ones to visualize.
+    
+    tensor_lib_entry_frame(exc_traceback)
+        Don't trace into internals of numpy/torch/tensorflow/jax; we want to reset frame
+        to where in the user's python code it asked the tensor lib to perform an
+        invalid operation.
+        
+        To detect libraries, look for code whose filename has "site-packages/{package}"
+        or "dist-packages/{package}".
+        
+        Return last-user-frame, first-tensor-lib-frame if lib found else last-user-frame, None
+        
+        Note: Sometimes operators yield exceptions and no tensor lib entry frame. E.g.,
+        np.ones(1) @ np.ones(2).
+
+FILE
+    /home/yusoli/.conda/envs/d2l-zh/lib/python3.8/site-packages/tsensor/analysis.py
+
+

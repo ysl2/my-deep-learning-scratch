@@ -1,0 +1,175 @@
+Help on module tsensor.parsing in tsensor:
+
+NAME
+    tsensor.parsing - MIT License
+
+DESCRIPTION
+    Copyright (c) 2020 Terence Parr
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+    
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+    
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+
+CLASSES
+    builtins.object
+        PyExprParser
+        Token
+    
+    class PyExprParser(builtins.object)
+     |  PyExprParser(code: str, hush_errors=True)
+     |  
+     |  A recursive-descent parser for subset of Python expressions and assignments.
+     |  There is a built-in parser, but I only want to process Python code  this library
+     |  can handle and I also want my own kind of abstract syntax tree. Constantly,
+     |  it's easier if I just parse the code I care about and ignore everything else.
+     |  Building this parser was certainly no great burden.
+     |  
+     |  Methods defined here:
+     |  
+     |  LA(self, i)
+     |  
+     |  LT(self, i)
+     |  
+     |  __init__(self, code: str, hush_errors=True)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  addexpr(self)
+     |  
+     |  arg(self)
+     |  
+     |  arglist(self)
+     |  
+     |  assignment_or_return_or_expr(self)
+     |  
+     |  atom(self)
+     |  
+     |  error(self, msg)
+     |  
+     |  expression(self)
+     |  
+     |  exprlist(self)
+     |  
+     |  isatom(self)
+     |  
+     |  isgroup(self)
+     |  
+     |  listatom(self)
+     |  
+     |  match(self, type)
+     |  
+     |  multexpr(self)
+     |  
+     |  parse(self)
+     |  
+     |  postexpr(self)
+     |  
+     |  powexpr(self)
+     |  
+     |  subexpr(self)
+     |  
+     |  unaryexpr(self)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+    
+    class Token(builtins.object)
+     |  Token(type, value, index, cstart_idx, cstop_idx, line)
+     |  
+     |  My own version of a token, with content copied from Python's TokenInfo object.
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, type, value, index, cstart_idx, cstop_idx, line)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __repr__(self)
+     |      Return repr(self).
+     |  
+     |  __str__(self)
+     |      Return str(self).
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+
+FUNCTIONS
+    mytokenize(s)
+        Use Python's tokenizer to lex s and collect my own token objects
+    
+    parse(statement: str, hush_errors=True)
+        Parse statement and return ast and token objects.  Parsing errors from invalid code
+        or code that I cannot parse are ignored unless hush_hush_errors is False.
+
+DATA
+    ADDOP = {14, 15}
+    AMPEREQUAL = 41
+    ASSIGNOP = {22, 27, 28, 29, 30, 36, ...}
+    AT = 49
+    ATEQUAL = 50
+    CIRCUMFLEXEQUAL = 43
+    COLON = 11
+    COMMA = 12
+    DOT = 23
+    DOUBLESLASHEQUAL = 48
+    DOUBLESTAR = 35
+    DOUBLESTAREQUAL = 46
+    ENDMARKER = 0
+    EQEQUAL = 27
+    EQUAL = 22
+    GREATEREQUAL = 30
+    LEFTSHIFTEQUAL = 44
+    LESSEQUAL = 29
+    LPAR = 7
+    LSQB = 9
+    MINEQUAL = 37
+    MINUS = 15
+    MULOP = {16, 17, 24, 49}
+    NAME = 1
+    NOTEQUAL = 28
+    NUMBER = 2
+    OP = 54
+    PERCENT = 24
+    PERCENTEQUAL = 40
+    PLUS = 14
+    PLUSEQUAL = 36
+    RIGHTSHIFTEQUAL = 45
+    RPAR = 8
+    RSQB = 10
+    SLASH = 17
+    SLASHEQUAL = 39
+    STAR = 16
+    STAREQUAL = 38
+    STRING = 3
+    TILDE = 31
+    UNARYOP = {31}
+    VBAREQUAL = 42
+
+FILE
+    /home/yusoli/.conda/envs/d2l-zh/lib/python3.8/site-packages/tsensor/parsing.py
+
+

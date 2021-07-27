@@ -1,0 +1,664 @@
+Help on module tsensor.ast in tsensor:
+
+NAME
+    tsensor.ast - MIT License
+
+DESCRIPTION
+    Copyright (c) 2020 Terence Parr
+    
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+    
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+    
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+
+CLASSES
+    builtins.BaseException(builtins.object)
+        IncrEvalTrap
+    builtins.object
+        ParseTreeNode
+            Assign
+            Atom
+            BinaryOp
+            Call
+            Index
+            ListLiteral
+            Member
+            Return
+            SubExpr
+            TupleLiteral
+            UnaryOp
+    
+    class Assign(ParseTreeNode)
+     |  Assign(parser, op, lhs, rhs, start, stop)
+     |  
+     |  Method resolution order:
+     |      Assign
+     |      ParseTreeNode
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, parser, op, lhs, rhs, start, stop)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  eval(self, frame)
+     |      Evaluate the expression represented by this (sub)tree in context of frame.
+     |      Try any exception found while evaluating and remember which operation that
+     |      was in this tree
+     |  
+     |  ----------------------------------------------------------------------
+     |  Readonly properties defined here:
+     |  
+     |  kids
+     |  
+     |  optokens
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from ParseTreeNode:
+     |  
+     |  __repr__(self)
+     |      Return repr(self).
+     |  
+     |  __str__(self)
+     |      Return str(self).
+     |  
+     |  clarify(self)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from ParseTreeNode:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+    
+    class Atom(ParseTreeNode)
+     |  Atom(parser, token)
+     |  
+     |  Method resolution order:
+     |      Atom
+     |      ParseTreeNode
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, parser, token)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __repr__(self)
+     |      Return repr(self).
+     |  
+     |  eval(self, frame)
+     |      Evaluate the expression represented by this (sub)tree in context of frame.
+     |      Try any exception found while evaluating and remember which operation that
+     |      was in this tree
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from ParseTreeNode:
+     |  
+     |  __str__(self)
+     |      Return str(self).
+     |  
+     |  clarify(self)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Readonly properties inherited from ParseTreeNode:
+     |  
+     |  kids
+     |  
+     |  optokens
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from ParseTreeNode:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+    
+    class BinaryOp(ParseTreeNode)
+     |  BinaryOp(parser, op, lhs, rhs, start, stop)
+     |  
+     |  Method resolution order:
+     |      BinaryOp
+     |      ParseTreeNode
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, parser, op, lhs, rhs, start, stop)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  clarify(self)
+     |  
+     |  eval(self, frame)
+     |      Evaluate the expression represented by this (sub)tree in context of frame.
+     |      Try any exception found while evaluating and remember which operation that
+     |      was in this tree
+     |  
+     |  ----------------------------------------------------------------------
+     |  Readonly properties defined here:
+     |  
+     |  kids
+     |  
+     |  optokens
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from ParseTreeNode:
+     |  
+     |  __repr__(self)
+     |      Return repr(self).
+     |  
+     |  __str__(self)
+     |      Return str(self).
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from ParseTreeNode:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+    
+    class Call(ParseTreeNode)
+     |  Call(parser, func, lparen, args, start, stop)
+     |  
+     |  Method resolution order:
+     |      Call
+     |      ParseTreeNode
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, parser, func, lparen, args, start, stop)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  clarify(self)
+     |  
+     |  eval(self, frame)
+     |      Evaluate the expression represented by this (sub)tree in context of frame.
+     |      Try any exception found while evaluating and remember which operation that
+     |      was in this tree
+     |  
+     |  ----------------------------------------------------------------------
+     |  Readonly properties defined here:
+     |  
+     |  kids
+     |  
+     |  optokens
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from ParseTreeNode:
+     |  
+     |  __repr__(self)
+     |      Return repr(self).
+     |  
+     |  __str__(self)
+     |      Return str(self).
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from ParseTreeNode:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+    
+    class IncrEvalTrap(builtins.BaseException)
+     |  IncrEvalTrap(offending_expr)
+     |  
+     |  Used during re-evaluation of python line that threw exception to trap which
+     |  subexpression caused the problem.
+     |  
+     |  Method resolution order:
+     |      IncrEvalTrap
+     |      builtins.BaseException
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, offending_expr)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from builtins.BaseException:
+     |  
+     |  __delattr__(self, name, /)
+     |      Implement delattr(self, name).
+     |  
+     |  __getattribute__(self, name, /)
+     |      Return getattr(self, name).
+     |  
+     |  __reduce__(...)
+     |      Helper for pickle.
+     |  
+     |  __repr__(self, /)
+     |      Return repr(self).
+     |  
+     |  __setattr__(self, name, value, /)
+     |      Implement setattr(self, name, value).
+     |  
+     |  __setstate__(...)
+     |  
+     |  __str__(self, /)
+     |      Return str(self).
+     |  
+     |  with_traceback(...)
+     |      Exception.with_traceback(tb) --
+     |      set self.__traceback__ to tb and return self.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Static methods inherited from builtins.BaseException:
+     |  
+     |  __new__(*args, **kwargs) from builtins.type
+     |      Create and return a new object.  See help(type) for accurate signature.
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from builtins.BaseException:
+     |  
+     |  __cause__
+     |      exception cause
+     |  
+     |  __context__
+     |      exception context
+     |  
+     |  __dict__
+     |  
+     |  __suppress_context__
+     |  
+     |  __traceback__
+     |  
+     |  args
+    
+    class Index(ParseTreeNode)
+     |  Index(parser, arr, lbrack, index, start, stop)
+     |  
+     |  Method resolution order:
+     |      Index
+     |      ParseTreeNode
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, parser, arr, lbrack, index, start, stop)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  eval(self, frame)
+     |      Evaluate the expression represented by this (sub)tree in context of frame.
+     |      Try any exception found while evaluating and remember which operation that
+     |      was in this tree
+     |  
+     |  ----------------------------------------------------------------------
+     |  Readonly properties defined here:
+     |  
+     |  kids
+     |  
+     |  optokens
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from ParseTreeNode:
+     |  
+     |  __repr__(self)
+     |      Return repr(self).
+     |  
+     |  __str__(self)
+     |      Return str(self).
+     |  
+     |  clarify(self)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from ParseTreeNode:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+    
+    class ListLiteral(ParseTreeNode)
+     |  ListLiteral(parser, elems, start, stop)
+     |  
+     |  Method resolution order:
+     |      ListLiteral
+     |      ParseTreeNode
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, parser, elems, start, stop)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  eval(self, frame)
+     |      Evaluate the expression represented by this (sub)tree in context of frame.
+     |      Try any exception found while evaluating and remember which operation that
+     |      was in this tree
+     |  
+     |  ----------------------------------------------------------------------
+     |  Readonly properties defined here:
+     |  
+     |  kids
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from ParseTreeNode:
+     |  
+     |  __repr__(self)
+     |      Return repr(self).
+     |  
+     |  __str__(self)
+     |      Return str(self).
+     |  
+     |  clarify(self)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Readonly properties inherited from ParseTreeNode:
+     |  
+     |  optokens
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from ParseTreeNode:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+    
+    class Member(ParseTreeNode)
+     |  Member(parser, op, obj, member, start, stop)
+     |  
+     |  Method resolution order:
+     |      Member
+     |      ParseTreeNode
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, parser, op, obj, member, start, stop)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  eval(self, frame)
+     |      Evaluate the expression represented by this (sub)tree in context of frame.
+     |      Try any exception found while evaluating and remember which operation that
+     |      was in this tree
+     |  
+     |  ----------------------------------------------------------------------
+     |  Readonly properties defined here:
+     |  
+     |  kids
+     |  
+     |  optokens
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from ParseTreeNode:
+     |  
+     |  __repr__(self)
+     |      Return repr(self).
+     |  
+     |  __str__(self)
+     |      Return str(self).
+     |  
+     |  clarify(self)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from ParseTreeNode:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+    
+    class ParseTreeNode(builtins.object)
+     |  ParseTreeNode(parser)
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, parser)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  __repr__(self)
+     |      Return repr(self).
+     |  
+     |  __str__(self)
+     |      Return str(self).
+     |  
+     |  clarify(self)
+     |  
+     |  eval(self, frame)
+     |      Evaluate the expression represented by this (sub)tree in context of frame.
+     |      Try any exception found while evaluating and remember which operation that
+     |      was in this tree
+     |  
+     |  ----------------------------------------------------------------------
+     |  Readonly properties defined here:
+     |  
+     |  kids
+     |  
+     |  optokens
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors defined here:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+    
+    class Return(ParseTreeNode)
+     |  Return(parser, result, start, stop)
+     |  
+     |  Method resolution order:
+     |      Return
+     |      ParseTreeNode
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, parser, result, start, stop)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  eval(self, frame)
+     |      Evaluate the expression represented by this (sub)tree in context of frame.
+     |      Try any exception found while evaluating and remember which operation that
+     |      was in this tree
+     |  
+     |  ----------------------------------------------------------------------
+     |  Readonly properties defined here:
+     |  
+     |  kids
+     |  
+     |  optokens
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from ParseTreeNode:
+     |  
+     |  __repr__(self)
+     |      Return repr(self).
+     |  
+     |  __str__(self)
+     |      Return str(self).
+     |  
+     |  clarify(self)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from ParseTreeNode:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+    
+    class SubExpr(ParseTreeNode)
+     |  SubExpr(parser, e, start, stop)
+     |  
+     |  Method resolution order:
+     |      SubExpr
+     |      ParseTreeNode
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, parser, e, start, stop)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  eval(self, frame)
+     |      Evaluate the expression represented by this (sub)tree in context of frame.
+     |      Try any exception found while evaluating and remember which operation that
+     |      was in this tree
+     |  
+     |  ----------------------------------------------------------------------
+     |  Readonly properties defined here:
+     |  
+     |  kids
+     |  
+     |  optokens
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from ParseTreeNode:
+     |  
+     |  __repr__(self)
+     |      Return repr(self).
+     |  
+     |  __str__(self)
+     |      Return str(self).
+     |  
+     |  clarify(self)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from ParseTreeNode:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+    
+    class TupleLiteral(ParseTreeNode)
+     |  TupleLiteral(parser, elems, start, stop)
+     |  
+     |  Method resolution order:
+     |      TupleLiteral
+     |      ParseTreeNode
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, parser, elems, start, stop)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  eval(self, frame)
+     |      Evaluate the expression represented by this (sub)tree in context of frame.
+     |      Try any exception found while evaluating and remember which operation that
+     |      was in this tree
+     |  
+     |  ----------------------------------------------------------------------
+     |  Readonly properties defined here:
+     |  
+     |  kids
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from ParseTreeNode:
+     |  
+     |  __repr__(self)
+     |      Return repr(self).
+     |  
+     |  __str__(self)
+     |      Return str(self).
+     |  
+     |  clarify(self)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Readonly properties inherited from ParseTreeNode:
+     |  
+     |  optokens
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from ParseTreeNode:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+    
+    class UnaryOp(ParseTreeNode)
+     |  UnaryOp(parser, op, opnd, start, stop)
+     |  
+     |  Method resolution order:
+     |      UnaryOp
+     |      ParseTreeNode
+     |      builtins.object
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, parser, op, opnd, start, stop)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  eval(self, frame)
+     |      Evaluate the expression represented by this (sub)tree in context of frame.
+     |      Try any exception found while evaluating and remember which operation that
+     |      was in this tree
+     |  
+     |  ----------------------------------------------------------------------
+     |  Readonly properties defined here:
+     |  
+     |  kids
+     |  
+     |  optokens
+     |  
+     |  ----------------------------------------------------------------------
+     |  Methods inherited from ParseTreeNode:
+     |  
+     |  __repr__(self)
+     |      Return repr(self).
+     |  
+     |  __str__(self)
+     |      Return str(self).
+     |  
+     |  clarify(self)
+     |  
+     |  ----------------------------------------------------------------------
+     |  Data descriptors inherited from ParseTreeNode:
+     |  
+     |  __dict__
+     |      dictionary for instance variables (if defined)
+     |  
+     |  __weakref__
+     |      list of weak references to the object (if defined)
+
+FUNCTIONS
+    leaves(t)
+    
+    postorder(t)
+    
+    walk(t, pre=<function <lambda> at 0x7f7a9308aaf0>, post=<function <lambda> at 0x7f7a9308ab80>)
+
+FILE
+    /home/yusoli/.conda/envs/d2l-zh/lib/python3.8/site-packages/tsensor/ast.py
+
+
