@@ -10,25 +10,41 @@ import time
 import numpy as np
 
 
-net = nn.Sequential(
-    nn.Conv2d(1, 96, kernel_size=11, stride=4, padding=1), nn.ReLU(),
-    nn.MaxPool2d(kernel_size=3, stride=2),
+def vgg_block(num_convs, in_channels, out_channels):
+    layers = []
+    for _ in range(num_convs):
+        layers.append(nn.Conv2d(in_channels, out_channels,
+                      kernel_size=3, padding=1))
+        layers.append(nn.ReLU())
+        in_channels = out_channels
 
-    nn.Conv2d(96, 256, kernel_size=5, padding=2), nn.ReLU(),
-    nn.MaxPool2d(kernel_size=3, stride=2),
+    layers.append(nn.MaxPool2d(kernel_size=2, stride=2))
+    return nn.Sequential(*layers)
 
-    nn.Conv2d(256, 384, kernel_size=3, padding=1), nn.ReLU(),
-    nn.Conv2d(384, 384, kernel_size=3, padding=1), nn.ReLU(),
-    nn.Conv2d(384, 256, kernel_size=3, padding=1), nn.ReLU(),
-    nn.MaxPool2d(kernel_size=3, stride=2),
-    nn.Flatten(),
 
-    nn.Linear(6400, 4096), nn.ReLU(),
-    nn.Dropout(p=0.5),
-    nn.Linear(4096, 4096), nn.ReLU(),
-    nn.Dropout(p=0.5),
-    nn.Linear(4096, 10)
-)
+conv_arch = ((1, 64), (1, 128), (2, 256), (2, 512), (2, 512))
+
+
+def vgg(conv_arch):
+    conv_blks = []
+    in_channels = 1
+    for (num_convs, out_channels) in conv_arch:
+        conv_blks.append(vgg_block(num_convs, in_channels, out_channels))
+        in_channels = out_channels
+
+    return nn.Sequential(
+        *conv_blks, nn.Flatten(),
+        nn.Linear(out_channels * 7 * 7, 4096), nn.ReLU(), nn.Dropout(0.5),
+        nn.Linear(4096, 4096, 10), nn.ReLU(), nn.Dropout(0.5),
+        nn.Linear(4096, 10)
+    )
+
+# net = vgg(conv_arch)
+
+
+ratio = 4
+small_conv_arch = [(pair[0], pair[1] // ratio) for pair in conv_arch]
+net = vgg(small_conv_arch)
 
 
 def get_dataloader_workers():
@@ -49,18 +65,12 @@ def load_data_fashion_mnist(batch_size, resize=None):
             data.DataLoader(mnist_test, batch_size, shuffle=False, num_workers=get_dataloader_workers()))
 
 
-batch_size = 128
-train_iter, test_iter = load_data_fashion_mnist(batch_size=batch_size, resize=224)
-
-
-
 class Accumulator:
     def __init__(self, n):
         self.data = [0.0] * n
 
     def add(self, *args):
         self.data = [a + float(b) for a, b in zip(self.data, args)]
-
 
     def reset(self):
         self.data = [0.0] * len(self.data)
@@ -72,7 +82,6 @@ class Accumulator:
 argmax = lambda x, *args, **kwargs: x.argmax(*args, **kwargs)
 astype = lambda x, *args, **kwargs: x.type(*args, **kwargs)
 reduce_sum = lambda x, *args, **kwargs: x.sum(*args, **kwargs)
-
 
 
 def accuracy(y_hat, y):
@@ -88,13 +97,11 @@ def evaluate_accuracy_gpu(net, data_iter, device=None):
         if not device:
             device = next(iter(net.parameters())).device
 
-
     metric = Accumulator(2)
     for X, y in data_iter:
         if isinstance(X, list):
 
             X = [x.to(device) for x in X]
-
 
         else:
             X = X.to(device)
@@ -128,7 +135,7 @@ class Animator:
         use_svg_display()
         self.fig, self.axes = plt.subplots(nrows, ncols, figsize=figsize)
         if nrows * ncols == 1:
-            self.axes = [self.axes,]
+            self.axes = [self.axes, ]
         self.config_axes = lambda: set_axes(
             self.axes[0], xlabel, ylabel, xlim, ylim, xscale, yscale, legend)
         self.X, self.Y, self.fmts = None, None, fmts
@@ -170,13 +177,11 @@ class Timer():
     def avg(self):
         return sum(self.times) / len(self.times)
 
-
     def sum(self):
         return sum(self.times)
 
     def cumsum(self):
         return np.array(self.times).cumsum().tolist()
-
 
 
 def train_ch6(net, train_iter, test_iter, num_epochs, lr, device):
@@ -210,7 +215,7 @@ def train_ch6(net, train_iter, test_iter, num_epochs, lr, device):
             train_acc = metric[1] / metric[2]
             if (i + 1) % (num_batches // 5) == 0 or i == num_batches - 1:
                 animator.add(epoch + (i + 1) / num_batches,
-                            (train_l, train_acc, None))
+                             (train_l, train_acc, None))
                 # plt.savefig('./fig.png')
 
         test_acc = evaluate_accuracy_gpu(net, test_iter)
@@ -228,6 +233,7 @@ def try_gpu(i=0):
     return torch.device('cpu')
 
 
-lr, num_epochs = 0.01, 10
+lr, num_epochs, batch_size = 0.05, 10, 128
+train_iter, test_iter = load_data_fashion_mnist(
+    batch_size=batch_size, resize=224)
 train_ch6(net, train_iter, test_iter, num_epochs, lr, try_gpu())
-
