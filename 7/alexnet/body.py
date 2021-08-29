@@ -1,4 +1,5 @@
 import torch
+
 from torch import nn
 import torchvision
 from torchvision import transforms
@@ -14,16 +15,24 @@ class Reshape(torch.nn.Module):
         return x.view(-1, 1, 28, 28)
 
 
-net = torch.nn.Sequential(
-    Reshape(),
-    nn.Conv2d(1, 6, kernel_size=5, padding=2), nn.Sigmoid(),
-    nn.AvgPool2d(kernel_size=2, stride=2),
-    nn.Conv2d(6, 16, kernel_size=5), nn.Sigmoid(),
-    nn.AvgPool2d(kernel_size=2, stride=2),
+net = nn.Sequential(
+    nn.Conv2d(1, 96, kernel_size=11, stride=4, padding=1), nn.ReLU(),
+    nn.MaxPool2d(kernel_size=3, stride=2),
+
+    nn.Conv2d(96, 256, kernel_size=5, padding=2), nn.ReLU(),
+    nn.MaxPool2d(kernel_size=3, stride=2),
+
+    nn.Conv2d(256, 384, kernel_size=3, padding=1), nn.ReLU(),
+    nn.Conv2d(384, 384, kernel_size=3, padding=1), nn.ReLU(),
+    nn.Conv2d(384, 256, kernel_size=3, padding=1), nn.ReLU(),
+    nn.MaxPool2d(kernel_size=3, stride=2),
     nn.Flatten(),
-    nn.Linear(16 * 5 * 5, 120), nn.Sigmoid(),
-    nn.Linear(120, 84), nn.Sigmoid(),
-    nn.Linear(84, 10)
+
+    nn.Linear(6400, 4096), nn.ReLU(),
+    nn.Dropout(p=0.5),
+    nn.Linear(4096, 4096), nn.ReLU(),
+    nn.Dropout(p=0.5),
+    nn.Linear(4096, 10)
 )
 
 
@@ -36,6 +45,7 @@ def load_data_fashion_mnist(batch_size, resize=None):
     if resize:
         trans.insert(0, transforms.Resize(resize))
     trans = transforms.Compose(trans)
+
     mnist_train = torchvision.datasets.FashionMNIST(
         root='~/Documents/_Github/my-deep-learning-scratch/data', train=True, transform=trans, download=True)
     mnist_test = torchvision.datasets.FashionMNIST(
@@ -44,8 +54,9 @@ def load_data_fashion_mnist(batch_size, resize=None):
             data.DataLoader(mnist_test, batch_size, shuffle=False, num_workers=get_dataloader_workers()))
 
 
-batch_size = 256
-train_iter, test_iter = load_data_fashion_mnist(batch_size=batch_size)
+batch_size = 128
+train_iter, test_iter = load_data_fashion_mnist(batch_size=batch_size, resize=224)
+
 
 
 class Accumulator:
@@ -54,6 +65,7 @@ class Accumulator:
 
     def add(self, *args):
         self.data = [a + float(b) for a, b in zip(self.data, args)]
+
 
     def reset(self):
         self.data = [0.0] * len(self.data)
@@ -81,11 +93,13 @@ def evaluate_accuracy_gpu(net, data_iter, device=None):
         if not device:
             device = next(iter(net.parameters())).device
 
+
     metric = Accumulator(2)
     for X, y in data_iter:
         if isinstance(X, list):
 
             X = [x.to(device) for x in X]
+
 
         else:
             X = X.to(device)
@@ -105,6 +119,7 @@ def set_axes(axes, xlabel, ylabel, xlim, ylim, xscale, yscale, legend):
     axes.set_yscale(yscale)
     axes.set_xlim(xlim)
     axes.set_ylim(ylim)
+
     if legend:
         axes.legend(legend)
     axes.grid()
@@ -160,11 +175,13 @@ class Timer():
     def avg(self):
         return sum(self.times) / len(self.times)
 
+
     def sum(self):
         return sum(self.times)
 
     def cumsum(self):
         return np.array(self.times).cumsum().tolist()
+
 
 
 def train_ch6(net, train_iter, test_iter, num_epochs, lr, device):
@@ -216,6 +233,5 @@ def try_gpu(i=0):
     return torch.device('cpu')
 
 
-lr, num_epochs = 0.9, 10
+lr, num_epochs = 0.01, 10
 train_ch6(net, train_iter, test_iter, num_epochs, lr, try_gpu())
-
