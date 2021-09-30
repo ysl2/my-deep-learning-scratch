@@ -36,7 +36,6 @@ class AddNorm(nn.Module):
         self.ln = nn.LayerNorm(normalized_shape)
 
     def forward(self, X, Y):
-        print('AddNorm')
         return self.ln(self.dropout(Y) + X)
 
 
@@ -101,21 +100,14 @@ class MultiHeadAttention(nn.Module):
         self.W_o = nn.Linear(num_hiddens, num_hiddens, bias=bias)
 
     def forward(self, queries, keys, values, valid_lens):
-        print('MultiHeadAttention1')
         queries = transpose_qkv(self.W_q(queries), self.num_heads)
-        print('MultiHeadAttention2')
         keys = transpose_qkv(self.W_k(keys), self.num_heads)
-        print('MultiHeadAttention3')
         values = transpose_qkv(self.W_v(values), self.num_heads)
 
         if valid_lens is not None:
-            print('MultiHeadAttention4')
             valid_lens = torch.repeat_interleave(valid_lens, repeats=self.num_heads, dim=0)
-        print('MultiHeadAttention5')
         output = self.attention(queries, keys, values, valid_lens)
-        print('MultiHeadAttention6')
         output_concat = transpose_output(output, self.num_heads)
-        print('MultiHeadAttention7')
         return self.W_o(output_concat)
 
 
@@ -129,7 +121,6 @@ class EncoderBlock(nn.Module):
         self.addnorm2 = AddNorm(norm_shape, dropout)
 
     def forward(self, X, valid_lens):
-        print('EncoderBlock')
         Y = self.addnorm1(X, self.attention(X, X, X, valid_lens))
         return self.addnorm2(Y, self.ffn(Y))
 
